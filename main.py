@@ -1,6 +1,3 @@
-from email.mime import image
-from multiprocessing.connection import wait
-from turtle import clear
 import streamlit as st
 import pandas as pd
 from streamlit_card import card
@@ -46,9 +43,10 @@ def append_correctness(corr):
     st.write(corr[0] + ' id corrected to '+ corr[1])
 def functionality():
     card(title=df[st.session_state["counter"]], text=' ', image="https://images.pexels.com/photos/2341290/pexels-photo-2341290.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")
-    st.markdown('<p class="urdu-font"; style=text-align:right; >درست شدہ لفظ۔</p>', unsafe_allow_html=True)
+    st.markdown('<p class="urdu-font"; style=text-align:right; >درست لفظ اعراب کے ساتھ یہاں درج کریں۔</p>', unsafe_allow_html=True)
     incorr=st.text_input('')
     st.markdown('<p class="urdu-font"; style=text-align:right; >مزید املا شامل کیجیے۔</p>', unsafe_allow_html=True)
+    st.markdown('<p class="urdu-font"; style=text-align:right; > ہر لفظ لکھنے کے بعد نیا لفظ انٹر دبا کر تحریر کریں </p>', unsafe_allow_html=True)
     var=st.text_area('')
     corr=st.checkbox('لفظ درست ہے۔')
     return {
@@ -72,10 +70,14 @@ if choose=='Correct Words':
         submitted = st.form_submit_button("اندراج کیجیے۔")
         if submitted:
             if checked_data['correct form']!='':
-                append_correctness([df[st.session_state["counter"]],checked_data['correct form']])
+                pass
+                #append_correctness([df[st.session_state["counter"]],checked_data['correct form']])
             if checked_data['variations'].split('\n')[0]!='':
                 st.write(len(checked_data['variations'].split('\n')))
-                append_variations([df[st.session_state["counter"]],checked_data['variations'].split('\n')])
+                if checked_data['correct form']!='':
+                    append_variations([checked_data['correct form'],checked_data['variations'].split('\n')])
+                else:
+                    append_variations([df[st.session_state["counter"]],checked_data['variations'].split('\n')])
             if checked_data['iscorrect']==True:
                 append_correctness([df[st.session_state["counter"]],df[st.session_state["counter"]]])
             st.write(checked_data['variations'].split('\n'))
@@ -112,18 +114,3 @@ if choose=='Data corrected Today':
         final.drop(final.index, inplace=True)
         final.to_csv('final.csv',index=False)
         st.write('Data Uploaded Successfully')
-
-
-    
-
-
-
-
-
-   
-
-
-
-
-
-
