@@ -27,7 +27,6 @@ def append_variations(var):
             'final words':i
         },ignore_index=True)
     final.to_csv('final.csv',index=False)
-    # os.remove('voices_unavailable.csv')
     df2.to_csv('voices_unavailable.csv',index=False)
     st.write('variations Added')
 def append_correctness(corr):
@@ -40,7 +39,6 @@ def append_correctness(corr):
     },ignore_index=True)
     
     final.to_csv('final.csv',index=False)
-    # os.remove('voices_unavailable.csv')
     df2.to_csv('voices_unavailable.csv',index=False)
     st.write(corr[0] + ' id corrected to '+ corr[1])
 def functionality():
