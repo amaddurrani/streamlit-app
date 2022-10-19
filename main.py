@@ -60,6 +60,7 @@ with st.sidebar:
                           default_index=0)
 
 if choose=='Correct Words':
+
     df=df['word']
     st.markdown('<p class="urdu-font"; style=text-align:right; >الفاظ کی درستگی کیجیے۔</p>', unsafe_allow_html=True)
     if "counter" not in st.session_state:
@@ -70,8 +71,7 @@ if choose=='Correct Words':
         submitted = st.form_submit_button("اندراج کیجیے۔")
         if submitted:
             if checked_data['correct form']!='':
-                pass
-                #append_correctness([df[st.session_state["counter"]],checked_data['correct form']])
+                append_correctness([df[st.session_state["counter"]],checked_data['correct form']])
             if checked_data['variations'].split('\n')[0]!='':
                 st.write(len(checked_data['variations'].split('\n')))
                 if checked_data['correct form']!='':
