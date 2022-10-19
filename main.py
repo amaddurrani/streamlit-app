@@ -5,7 +5,6 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from streamlit_option_menu import option_menu
 import gspread_dataframe as gd
-import os
 scope = ['https://www.googleapis.com/auth/spreadsheets',
          "https://www.googleapis.com/auth/drive"]
 df= pd.read_csv('voices_unavailable.csv')
