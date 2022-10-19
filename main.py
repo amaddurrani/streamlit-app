@@ -70,7 +70,7 @@ if choose=='Correct Words':
         
         submitted = st.form_submit_button("اندراج کیجیے۔")
         if submitted:
-            if checked_data['correct form']!='':
+            if checked_data['correct form']!='' and checked_data['variations'].split('\n')[0]=='':
                 append_correctness([df[st.session_state["counter"]],checked_data['correct form']])
             if checked_data['variations'].split('\n')[0]!='':
                 st.write(len(checked_data['variations'].split('\n')))
