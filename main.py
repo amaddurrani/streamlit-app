@@ -72,6 +72,7 @@ def functionality():
         'variations':var,
         'iscorrect':corr
     }
+
 with st.sidebar:
     choose = option_menu("Modules", ["Correct Words","Data corrected Today","See Uploaded Data"],
                          icons=['check','search' ,'search'],
@@ -91,19 +92,31 @@ if choose=='Correct Words':
             if checked_data['correct form']!='' and checked_data['variations'].split('\n')[0]=='':
                 print('1st one')
                 append_correctness([df[st.session_state["counter"]],checked_data['correct form']])
-            if checked_data['variations'].split('\n')[0]!='':
+                print(checked_data['variations'].split('\n'))
+                #st.session_state["counter"]=st.session_state["counter"]+1
+                st.experimental_rerun()
+            elif checked_data['variations'].split('\n')[0]!='':
                 st.write(len(checked_data['variations'].split('\n')))
                 if checked_data['correct form']!='':
                     print('2nd one')
                     append_variations_with_original_word([checked_data['correct form'],checked_data['variations'].split('\n')],df[st.session_state["counter"]])
+                    print(checked_data['variations'].split('\n'))
+                    #st.session_state["counter"]=st.session_state["counter"]+1
+                    st.experimental_rerun()
                 else:
                     print('3rd one')
                     append_variations([df[st.session_state["counter"]],checked_data['variations'].split('\n')])
-            if checked_data['iscorrect']==True:
+                    print(checked_data['variations'].split('\n'))
+                    #st.session_state["counter"]=st.session_state["counter"]+1
+                    st.experimental_rerun()
+            elif checked_data['iscorrect']==True:
                 append_correctness([df[st.session_state["counter"]],df[st.session_state["counter"]]])
-            st.write(checked_data['variations'].split('\n'))
-            #st.session_state["counter"]=st.session_state["counter"]+1
-            st.experimental_rerun()
+                st.write(checked_data['variations'].split('\n'))
+                #st.session_state["counter"]=st.session_state["counter"]+1
+                st.experimental_rerun()
+            else:
+                st.error('fill the form please')
+
 
 if choose=='See Uploaded Data':
     credentials = ServiceAccountCredentials.from_json_keyfile_name("words-correction-a710f731b5e8.json", scope)
@@ -118,20 +131,13 @@ if choose=='Data corrected Today':
     credentials = ServiceAccountCredentials.from_json_keyfile_name("words-correction-a710f731b5e8.json", scope)
     client = gspread.authorize(credentials)
     sheet = client.open("Corrected words").sheet1
-    #sheet=pd.read_csv('final.csv')
     final= pd.read_csv('final.csv')
     st.write(final)
     upload= st.button('Upload File')
     if upload:
-        # final= pd.concat([final,pd.DataFrame(sheet.get())],axis=0)
-        # #final= pd.concat([final,sheet],axis=0)
-        # st.write(final)
-        # sheet.clear()
         existing=gd.get_as_dataframe(sheet)
         updated= existing.append(final)
         gd.set_with_dataframe(sheet,updated)
-        #set_withdataframe(worksheet=sheet,row=1, col=1, dataframe=final, include_index=False,include_column_header=True, resize=True)
-        #sheet=sheet.update(final)
         final.drop(final.index, inplace=True)
         final.to_csv('final.csv',index=False)
         st.write('Data Uploaded Successfully')
