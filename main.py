@@ -29,6 +29,23 @@ def append_variations(var):
     final.to_csv('final.csv',index=False)
     df2.to_csv('voices_unavailable.csv',index=False)
     st.write('variations Added')
+def append_variations(var,original):
+    print('overloaded method')
+    df2= pd.read_csv('voices_unavailable.csv')
+    word=var[0]
+    df2=df2.drop(df2.loc[df2['word']==original].index.values)
+    variations=var[1]
+    final=pd.read_csv('final.csv')
+    final=final.append({
+            'final words':word
+        },ignore_index=True)
+    for i in variations:
+        final=final.append({
+            'final words':i
+        },ignore_index=True)
+    final.to_csv('final.csv',index=False)
+    df2.to_csv('voices_unavailable.csv',index=False)
+    st.write('variations Added')
 def append_correctness(corr):
     
     df2= pd.read_csv('voices_unavailable.csv')
@@ -71,12 +88,15 @@ if choose=='Correct Words':
         submitted = st.form_submit_button("اندراج کیجیے۔")
         if submitted:
             if checked_data['correct form']!='' and checked_data['variations'].split('\n')[0]=='':
+                print('1st one')
                 append_correctness([df[st.session_state["counter"]],checked_data['correct form']])
             if checked_data['variations'].split('\n')[0]!='':
                 st.write(len(checked_data['variations'].split('\n')))
                 if checked_data['correct form']!='':
-                    append_variations([checked_data['correct form'],checked_data['variations'].split('\n')])
+                    print('2nd one')
+                    append_variations([checked_data['correct form'],checked_data['variations'].split('\n')],df[st.session_state["counter"]])
                 else:
+                    print('3rd one')
                     append_variations([df[st.session_state["counter"]],checked_data['variations'].split('\n')])
             if checked_data['iscorrect']==True:
                 append_correctness([df[st.session_state["counter"]],df[st.session_state["counter"]]])
